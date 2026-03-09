@@ -1,62 +1,31 @@
 import { TodoFactory } from "./todo";
 import { renderTodos } from "./renderTodos";
-import { ProjectFactory } from "./project";
 
 export const createForm = (state) => {
-
-    const formAnchor = document.getElementById('form-anchor')
+    const anchor = document.getElementById('form-anchor');
     const form = document.createElement('form');
-    const title = document.createElement('input');
-    const description = document.createElement('textarea');
-    const  dueDate = document.createElement('input');
-    dueDate.type = 'date';
+    form.style.display = 'flex';
+    form.style.gap = '10px';
+
+    const title = Object.assign(document.createElement('input'), { placeholder: 'Task Title', required: true });
+    const date = Object.assign(document.createElement('input'), { type: 'date' });
+    const subBtn = Object.assign(document.createElement('button'), { textContent: 'Add Task', type: 'submit', className: 'submit-btn' });
     
-    const   priority = document.createElement('select');
-    const   high =  document.createElement('option');
-    const   medium = document.createElement('option');
-    const   low = document.createElement('option');
+    // Simple inline style for the button to match emerald
+    subBtn.style.backgroundColor = '#10b981';
+    subBtn.style.color = 'white';
+    subBtn.style.border = 'none';
+    subBtn.style.padding = '8px 16px';
+    subBtn.style.borderRadius = '6px';
 
-    high.textContent = 'high';
-    medium.textContent = 'medium';
-    low.textContent = 'low';
+    form.append(title, date, subBtn);
+    anchor.appendChild(form);
 
-        high.value = 'high';
-    medium.value = 'medium';
-    low.value = 'low';
-
-
-    priority.appendChild(high);
-    priority.appendChild(medium);
-    priority.appendChild(low);
-
-
-    
-    const subBtn = document.createElement('button');
-    
-    
-    form.appendChild(title);
-    form.appendChild(description);
-    form.appendChild(dueDate);
-    form.appendChild(priority);
-    form.appendChild(subBtn);
-
-    formAnchor.appendChild(form);
-
-form.onsubmit = (e) => {
+    form.onsubmit = (e) => {
         e.preventDefault();
-
-        // Debugging: See exactly what the form is looking at
-    console.log("Current State:", state);
-
-        const newTodo = TodoFactory(title.value, description.value, dueDate.value, priority.value);
-        
-        // Use state.current to find the "active" project
-        state.addTodo(newTodo); 
-        renderTodos(state);
-        
+        const newTodo = TodoFactory(title.value, "No description", date.value, "medium");
+        state.current.addTodo(newTodo); 
+        renderTodos(state.current);
         form.reset();
     };
-    
-    
-
 }

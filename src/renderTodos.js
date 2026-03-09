@@ -1,40 +1,31 @@
-// src/renderTodos.js
-export function renderTodos(project) {
+export const renderTodos = (project) => {
     const display = document.getElementById('todo-display');
-    display.innerHTML = ""; // Clear the old view
+    display.innerHTML = ""; 
 
-    project.getTodos().forEach((todo, index) => {
+    project.todos.forEach((todo, index) => {
         const card = document.createElement('div');
         card.className = `todo-card ${todo.priority}`;
+
+        const info = document.createElement('div');
+        info.className = 'todo-info';
         
-        card.innerHTML = `
-            <h3>${todo.title}</h3>
-            <p>${todo.description}</p>
-            <small>Due: ${todo.dueDate}</small>
-        `;
+        const title = document.createElement('h3');
+        title.textContent = todo.title;
+
+        const date = document.createElement('span');
+        date.textContent = todo.dueDate;
+        date.style.color = '#94a3b8';
 
         const delBtn = document.createElement('button');
-        delBtn.textContent = "Delete";
+        delBtn.className = 'del-btn';
+        delBtn.textContent = 'Delete';
         delBtn.onclick = () => {
-            project.removeTodo(index);
-            renderTodos(project); // Refresh the view
+            project.todos.splice(index, 1);
+            renderTodos(project);
         };
 
-        const completeBtn = document.createElement('button');
-        completeBtn.textContent = todo.isComplete() ? "✔️ Done" : "⭕ Mark Done";
-        completeBtn.className = "complete-btn";
-
-        if(todo.isComplete()){
-            card.classList.add('completed');
-        }
-
-        completeBtn.onclick = () =>{
-            todo.toggleComplete();
-            renderTodos(project)
-        }
-        
-        card.appendChild(completeBtn);
-        card.appendChild(delBtn);
+        info.append(title);
+        card.append(info, date, delBtn);
         display.appendChild(card);
     });
-}
+};
