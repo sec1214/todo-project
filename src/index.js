@@ -1,4 +1,3 @@
-// 1. IMPORT everything (Ensure paths are correct!)
 import './styles.css';
 import { createForm } from './createForm';
 import { ProjectFactory } from "./project";
@@ -10,13 +9,15 @@ const projects = [];
 
 const state = {
     current : null
-}
+};
 
 const inbox = ProjectFactory('inbox');
 projects.push(inbox);
-state.current = inbox;
-createForm(state.current);
 
+state.current = inbox;
+
+// Passing the whole 'state' object for reactivity
+createForm(state); 
 
 renderProjectList(projects, state);
-renderTodos(state.current)
+renderTodos(state.current);
