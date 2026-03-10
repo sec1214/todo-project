@@ -1,16 +1,17 @@
 export const renderTodos = (project) => {
     const display = document.getElementById('todo-display');
 
-    // THE FIX: If project is undefined or null, stop here!
-    if (!project || !project.todos) {
+    if (!project || !project.getTodos) {
         console.warn("Render aborted: No project provided.");
         return; 
     }
     display.innerHTML = ""; 
 
+    // Use getTodos() to stay consistent with your Factory
     project.getTodos().forEach((todo, index) => {
         const card = document.createElement('div');
-        card.className = `todo-card ${todo.priority}`;
+        // Ensure priority is lowercase for CSS matching
+        card.className = `todo-card ${todo.priority.toLowerCase()}`;
 
         const info = document.createElement('div');
         info.className = 'todo-info';
@@ -19,14 +20,16 @@ export const renderTodos = (project) => {
         title.textContent = todo.title;
 
         const date = document.createElement('span');
-        date.textContent = todo.dueDate;
+        date.textContent = todo.dueDate || 'No Date';
         date.style.color = '#94a3b8';
 
         const delBtn = document.createElement('button');
         delBtn.className = 'del-btn';
         delBtn.textContent = 'Delete';
+        
         delBtn.onclick = () => {
-            project.todos.splice(index, 1);
+            // Use the method from your ProjectFactory!
+            project.removeTodo(index); 
             renderTodos(project);
         };
 
