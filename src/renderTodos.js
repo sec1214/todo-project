@@ -15,9 +15,16 @@ export const renderTodos = (project) => {
 
         const info = document.createElement('div');
         info.className = 'todo-info';
+
+        const actions = document.createElement('div');
+actions.className = 'todo-actions';
         
         const title = document.createElement('h3');
         title.textContent = todo.title;
+
+        const desc = document.createElement('p');
+        desc.textContent = todo.description; 
+        desc.className = 'todo-description';
 
         const date = document.createElement('span');
         date.textContent = todo.dueDate || 'No Date';
@@ -33,8 +40,9 @@ export const renderTodos = (project) => {
             renderTodos(project);
         };
 
-        info.append(title);
-        card.append(info, date, delBtn);
+        info.append(title, desc);
+        actions.append(date, delBtn);
+        card.append(info, actions);
         display.appendChild(card);
     });
 };

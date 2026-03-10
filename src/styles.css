@@ -3,12 +3,18 @@
     --emerald-primary: #10b981;
     --amber-primary: #f59e0b;
     --slate-100: #f1f5f9;
+    --slate-200: #e2e8f0;
+    --slate-500: #64748b;
+    --slate-900: #1e293b;
     --white: #ffffff;
+    --red-light: #fee2e2;
+    --red-primary: #ef4444;
 }
 
 body {
     margin: 0;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--white);
 }
 
 .app-container {
@@ -16,30 +22,78 @@ body {
     height: 100vh;
 }
 
-/* --- THE PRIOR SIDEBAR (RESTORED) --- */
+/* --- SIDEBAR --- */
 #sidebar {
     width: 260px;
-    background-color: var(--emerald-dark); /* Bold Dark Green */
+    background-color: var(--emerald-dark);
     color: white;
     padding: 2rem 1.5rem;
     display: flex;
     flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
 }
 
 .logo {
     font-size: 1.5rem;
     font-weight: 800;
-    margin-bottom: 3rem;
-    color: white;
+    margin-bottom: 2rem;
 }
 .logo span { color: var(--emerald-primary); }
 
-.project-btn {
-    width: 100%;
+/* New: Header for the Projects Section */
+.projects-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.projects-header h2 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+}
+
+/* The Hover-Reveal "+" Button */
+.icon-add-btn {
     background: transparent;
     border: none;
-    color: #a7f3d0; /* Soft green text */
-    padding: 12px;
+    color: var(--emerald-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.2s, transform 0.2s;
+    line-height: 1;
+}
+
+.sidebar-section:hover .icon-add-btn {
+    opacity: 1; /* Revealed on hover of the section */
+}
+
+.icon-add-btn:hover {
+    color: white;
+    transform: scale(1.2);
+}
+
+/* --- PROJECT LIST ITEMS --- */
+.project-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    width: 100%;
+    border-radius: 8px;
+}
+
+.project-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #a7f3d0;
+    padding: 10px;
     text-align: left;
     border-radius: 8px;
     cursor: pointer;
@@ -57,15 +111,66 @@ body {
     color: white;
 }
 
-.del-project-btn{
-
+.del-project-btn {
+    background: transparent;
+    border: none;
+    color: rgba(167, 243, 208, 0.3);
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: 0.2s;
 }
-/* --- THE ONE-LINE CONTENT AREA --- */
+
+.project-wrapper:hover .del-project-btn {
+    opacity: 1;
+}
+
+.del-project-btn:hover {
+    color: var(--red-primary);
+}
+
+/* --- NEW PROJECT INPUT GROUP --- */
+#project-input-group {
+    margin: 10px 0;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+#new-project-name {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid var(--slate-200);
+    margin-bottom: 8px;
+    box-sizing: border-box; /* Fixes padding overflow */
+    font-size: 0.9rem;
+}
+
+.input-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.input-actions .submit-btn {
+    flex: 2;
+    padding: 6px;
+    font-size: 0.8rem;
+}
+
+.input-actions .del-btn {
+    flex: 1;
+    padding: 6px;
+    background: rgba(239, 68, 68, 0.1);
+}
+
+/* --- MAIN CONTENT & FORM --- */
 .main-wrapper {
     flex: 1;
     display: flex;
     flex-direction: column;
-    background-color: white;
+    overflow: hidden;
 }
 
 header {
@@ -83,7 +188,7 @@ header {
 
 .form-input, .form-date, .form-select {
     padding: 10px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--slate-200);
     border-radius: 6px;
     flex: 1;
 }
@@ -98,7 +203,7 @@ header {
     cursor: pointer;
 }
 
-/* --- ONE-LINE TODO CARDS --- */
+/* --- TODO CARDS --- */
 #todo-display {
     padding: 2rem;
     overflow-y: auto;
@@ -106,39 +211,43 @@ header {
 
 .todo-card {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    padding: 12px 20px;
-    border: 1px solid #e2e8f0;
-    border-left: 5px solid var(--amber-primary);
-    border-radius: 10px;
-    margin-bottom: 10px;
+    align-items: center;
+    padding: 16px 24px;
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid var(--slate-200);
 }
 
-/* Priority Border Colors for Todo Cards */
-.todo-card.high { border-left: 8px solid #ef4444; }    /* Red */
-.todo-card.medium { border-left: 8px solid #f59e0b; }  /* Amber */
-.todo-card.low { border-left: 8px solid #10b981; }     /* Emerald */
-
-/* If you want the text to change color in the sidebar for active projects */
-.project-btn.high-priority { color: #fca5a5; font-weight: bold; }
+.todo-card.high { border-left: 8px solid var(--red-primary); }
+.todo-card.medium { border-left: 8px solid var(--amber-primary); }
+.todo-card.low { border-left: 8px solid var(--emerald-primary); }
 
 .todo-info {
     display: flex;
-    gap: 20px;
-    align-items: center;
-    flex: 1;
+    flex-direction: column;
+    gap: 4px;
 }
 
-.todo-info h3 { margin: 0; font-size: 1rem; min-width: 140px; }
-.todo-info p { margin: 0; color: #64748b; font-size: 0.85rem; }
+.todo-info h3 { margin: 0; font-size: 1.1rem; color: var(--slate-900); }
+.todo-desc { margin: 0; font-size: 0.9rem; color: var(--slate-500); }
+
+.todo-actions {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.todo-date { font-size: 0.85rem; color: #94a3b8; font-weight: 500; }
 
 .del-btn {
-    background: #fee2e2;
-    color: #ef4444;
+    background: var(--red-light);
+    color: var(--red-primary);
     border: none;
-    padding: 6px 12px;
+    padding: 8px 16px;
     border-radius: 6px;
+    font-weight: 600;
     cursor: pointer;
 }
-

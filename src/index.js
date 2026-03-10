@@ -3,6 +3,7 @@ import { createForm } from './createForm';
 import { ProjectFactory } from "./project";
 import { renderTodos } from "./renderTodos";
 import { renderProjectList } from './renderProjects';
+import { initProjectControls } from './projectController'; // New Import
 
 const projects = [];
 const state = { current : null };
@@ -16,3 +17,6 @@ state.current = inbox;
 createForm(state);
 renderProjectList(projects, state);
 renderTodos(state.current);
+
+// Fire up the sidebar logic
+initProjectControls(projects, state);

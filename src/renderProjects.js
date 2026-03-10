@@ -1,57 +1,52 @@
-import { renderTodos } from "./renderTodos";
-import { ProjectFactory } from "./project";
+import { renderTodos } from "./renderTodos.js";
 
-export function renderProjectList(projectsArray, stateManager){
-    const listContainer = document.getElementById('project-list');
-    listContainer.innerHTML = "";
+export const renderProjectList = (projectsArray, stateManager) => {
+  const listContainer = document.getElementById("project-list");
 
-    projectsArray.forEach((project, index) => {
-        // Container for Project Button + Delete Button
-        const projectWrapper = document.createElement('div');
-        projectWrapper.className = "project-wrapper";
+  if (!listContainer) return;
 
-        const projectBtn = document.createElement('button');
-        projectBtn.textContent = project.name;
-        projectBtn.className = "project-btn";
+  listContainer.innerHTML = "";
 
-        if(project === stateManager.current) projectBtn.classList.add('active');
+  projectsArray.forEach((project, index) => {
+    const projectWrapper = document.createElement("div");
+    projectWrapper.className = "project-wrapper";
 
-        projectBtn.onclick = () => {
-            stateManager.current = project; 
-            renderTodos(project);
-            renderProjectList(projectsArray, stateManager);
-        };
+    const projectBtn = document.createElement("button");
+    projectBtn.textContent = project.name;
+    projectBtn.className = "project-btn";
 
-        // --- THE DELETE BUTTON LIVES HERE (Inside the loop) ---
-        const delBtn = document.createElement('button');
-        delBtn.textContent = "X";
-        delBtn.className = "del-project-btn";
+    // Active State Logic
+    if (project === stateManager.current) {
+      projectBtn.classList.add("active");
+    }
 
-        delBtn.onclick = (e) => {
-            e.stopPropagation(); // Prevents the project from being selected when deleting
-            projectsArray.splice(index, 1); // Remove from array
-            
-            // If we deleted the active project, reset view to first project
-            if(stateManager.current === project) stateManager.current = projectsArray[0];
-            
-            renderProjectList(projectsArray, stateManager);
-        };
-
-        projectWrapper.appendChild(projectBtn);
-        projectWrapper.appendChild(delBtn);
-        listContainer.appendChild(projectWrapper);
-    });
-
-    // --- ADD PROJECT BUTTON ---
-    const addBtn = document.createElement('button');
-    addBtn.textContent = "+ New Project";
-    addBtn.onclick = () => {
-        const title = prompt("Enter Project Name:");
-        if(title){
-            const newProj = ProjectFactory(title);
-            projectsArray.push(newProj);
-            renderProjectList(projectsArray, stateManager);
-        }
+    projectBtn.onclick = () => {
+      stateManager.current = project;
+      renderProjectList(projectsArray, stateManager);
+      renderTodos(project);
     };
-    listContainer.appendChild(addBtn);
-}
+
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "×";
+    delBtn.className = "del-project-btn";
+
+    delBtn.onclick = (e) => {
+      e.stopPropagation();
+
+      // Don't allow deleting the last project if you want to avoid a blank screen
+      projectsArray.splice(index, 1);
+
+      if (stateManager.current === project) {
+        stateManager.current =
+          projectsArray.length > 0 ? projectsArray[0] : null;
+      }
+
+      renderProjectList(projectsArray, stateManager);
+      renderTodos(stateManager.current);
+    };
+
+    projectWrapper.appendChild(projectBtn);
+    projectWrapper.appendChild(delBtn);
+    listContainer.appendChild(projectWrapper);
+  });
+};

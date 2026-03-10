@@ -1,27 +1,50 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TaskMaster Pro</title>
-</head>
-<body>
+  </head>
+  <body>
     <div class="app-container">
-        <aside id="sidebar">
-            <h1 class="logo">Task<span>Master</span></h1>
-            <div class="sidebar-section">
-                <h2>Projects</h2>
-                <div id="project-list"></div>
-            </div>
-        </aside>
+      <aside id="sidebar">
+        <h1 class="logo">Task<span>Master</span></h1>
 
-        <div class="main-wrapper">
-            <header>
-                <div id="form-anchor"></div>
-            </header>
-            <main id="todo-display">
-                </main>
+        <div class="sidebar-section">
+          <div class="projects-header">
+            <h2>Projects</h2>
+            <button
+              id="show-input-btn"
+              class="icon-add-btn"
+              title="Add Project"
+            >
+              +
+            </button>
+          </div>
+
+          <div id="project-list"></div>
+
+          <div id="project-input-group" style="display: none">
+            <input
+              type="text"
+              id="new-project-name"
+              placeholder="Project name..."
+              class="form-input"
+            />
+            <div class="input-actions">
+              <button id="save-project" class="submit-btn">Add</button>
+              <button id="cancel-project" class="del-btn">✕</button>
+            </div>
+          </div>
         </div>
+      </aside>
+
+      <div class="main-wrapper">
+        <header>
+          <div id="form-anchor"></div>
+        </header>
+        <main id="todo-display"></main>
+      </div>
     </div>
-</body>
+  </body>
 </html>
