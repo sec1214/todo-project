@@ -9,12 +9,22 @@
     <div class="app-container">
         <aside id="sidebar">
             <h1 class="logo">Task<span>Master</span></h1>
-            <div class="sidebar-section">
-                <h2>Projects</h2>
-                <div id="project-list">
-                    </div>
-                <button id="add-project-btn" class="add-project-btn">+ New Project</button>
+<div class="sidebar-section">
+    <h2>Projects</h2>
+    <div id="project-list"></div>
+    
+    <div id="add-project-container">
+        <button id="add-project-btn" class="add-project-btn">+ New Project</button>
+        
+        <div id="project-input-group" style="display: none;">
+            <input type="text" id="new-project-name" placeholder="Project name..." class="form-input">
+            <div class="input-actions">
+                <button id="save-project" class="submit-btn">Add</button>
+                <button id="cancel-project" class="del-btn">✕</button>
             </div>
+        </div>
+    </div>
+</div>
         </aside>
 
         <div class="main-wrapper">
