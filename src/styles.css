@@ -1,55 +1,132 @@
 :root {
+    --emerald-dark: #064e3b;
     --emerald-primary: #10b981;
-    --emerald-light: #ecfdf5;
     --amber-primary: #f59e0b;
-    --slate-50: #f8fafc;
     --slate-100: #f1f5f9;
-    --slate-200: #e2e8f0;
-    --slate-800: #1e293b;
     --white: #ffffff;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+}
 
-.app-container { display: flex; height: 100vh; background-color: var(--white); }
+.app-container {
+    display: flex;
+    height: 100vh;
+}
 
-/* Sidebar */
-#sidebar { width: 280px; background-color: var(--slate-50); border-right: 1px solid var(--slate-200); padding: 2rem 1.5rem; }
-.logo { font-size: 1.5rem; font-weight: 800; color: var(--slate-800); margin-bottom: 3rem; }
+/* --- THE PRIOR SIDEBAR (RESTORED) --- */
+#sidebar {
+    width: 260px;
+    background-color: var(--emerald-dark); /* Bold Dark Green */
+    color: white;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 3rem;
+    color: white;
+}
 .logo span { color: var(--emerald-primary); }
-.sidebar-section h2 { font-size: 0.75rem; text-transform: uppercase; color: #64748b; margin-bottom: 1rem; }
 
 .project-btn {
-    width: 100%; background: transparent; border: none; padding: 12px; text-align: left;
-    border-radius: 8px; cursor: pointer; font-weight: 500; transition: 0.2s;
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: #a7f3d0; /* Soft green text */
+    padding: 12px;
+    text-align: left;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.2s;
 }
-.project-btn.active { background-color: var(--emerald-light); color: var(--emerald-primary); }
 
-.add-project-btn {
-    margin-top: 15px; width: 100%; padding: 10px; background: transparent;
-    border: 1px dashed var(--emerald-primary); color: var(--emerald-primary);
-    border-radius: 8px; cursor: pointer; font-weight: 600;
+.project-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
 }
 
-/* Main Content */
-.main-wrapper { flex: 1; display: flex; flex-direction: column; }
-header { padding: 2rem 3rem; border-bottom: 1px solid var(--slate-100); }
-#todo-display { flex: 1; padding: 2rem 3rem; overflow-y: auto; }
+.project-btn.active {
+    background: var(--emerald-primary);
+    color: white;
+}
 
-/* One-Line Todo Card */
+/* --- THE ONE-LINE CONTENT AREA --- */
+.main-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+}
+
+header {
+    padding: 2rem;
+    border-bottom: 1px solid var(--slate-100);
+}
+
+.todo-form-container {
+    display: flex;
+    gap: 10px;
+    background: var(--slate-100);
+    padding: 15px;
+    border-radius: 12px;
+}
+
+.form-input, .form-date, .form-select {
+    padding: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    flex: 1;
+}
+
+.submit-btn {
+    background: var(--emerald-primary);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* --- ONE-LINE TODO CARDS --- */
+#todo-display {
+    padding: 2rem;
+    overflow-y: auto;
+}
+
 .todo-card {
-    display: flex; align-items: center; gap: 20px; padding: 12px 20px;
-    background: white; border: 1px solid var(--slate-200); border-left: 5px solid var(--amber-primary);
-    border-radius: 12px; margin-bottom: 10px; transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border: 1px solid #e2e8f0;
+    border-left: 5px solid var(--amber-primary);
+    border-radius: 10px;
+    margin-bottom: 10px;
 }
-.todo-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-.todo-info { flex-grow: 1; display: flex; align-items: center; gap: 20px; }
-.todo-info h3 { font-size: 1rem; min-width: 120px; }
-.todo-info p { color: #64748b; font-size: 0.85rem; }
 
-/* Buttons */
-.del-btn {
-    background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3;
-    padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;
+.todo-info {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex: 1;
 }
-.del-btn:hover { background: #e11d48; color: white; }
+
+.todo-info h3 { margin: 0; font-size: 1rem; min-width: 140px; }
+.todo-info p { margin: 0; color: #64748b; font-size: 0.85rem; }
+
+.del-btn {
+    background: #fee2e2;
+    color: #ef4444;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}

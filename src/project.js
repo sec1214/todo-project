@@ -19,6 +19,7 @@ export const ProjectFactory = (name) => {
 
     return { 
         name, 
+        todos,
         addTodo, 
         getTodos, 
         removeTodo 

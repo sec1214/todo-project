@@ -1,8 +1,14 @@
 export const renderTodos = (project) => {
     const display = document.getElementById('todo-display');
+
+    // THE FIX: If project is undefined or null, stop here!
+    if (!project || !project.todos) {
+        console.warn("Render aborted: No project provided.");
+        return; 
+    }
     display.innerHTML = ""; 
 
-    project.todos.forEach((todo, index) => {
+    project.getTodos().forEach((todo, index) => {
         const card = document.createElement('div');
         card.className = `todo-card ${todo.priority}`;
 

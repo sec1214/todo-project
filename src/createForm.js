@@ -4,28 +4,26 @@ import { renderTodos } from "./renderTodos";
 export const createForm = (state) => {
     const anchor = document.getElementById('form-anchor');
     const form = document.createElement('form');
-    form.style.display = 'flex';
-    form.style.gap = '10px';
+    form.className = 'todo-form-container'; // THIS MUST MATCH CSS
 
-    const title = Object.assign(document.createElement('input'), { placeholder: 'Task Title', required: true });
-    const date = Object.assign(document.createElement('input'), { type: 'date' });
-    const subBtn = Object.assign(document.createElement('button'), { textContent: 'Add Task', type: 'submit', className: 'submit-btn' });
+    const title = Object.assign(document.createElement('input'), { placeholder: 'Title', required: true, className: 'form-input' });
+    const desc = Object.assign(document.createElement('input'), { placeholder: 'Description', className: 'form-input' });
+    const date = Object.assign(document.createElement('input'), { type: 'date', className: 'form-date' });
     
-    // Simple inline style for the button to match emerald
-    subBtn.style.backgroundColor = '#10b981';
-    subBtn.style.color = 'white';
-    subBtn.style.border = 'none';
-    subBtn.style.padding = '8px 16px';
-    subBtn.style.borderRadius = '6px';
+    const priority = document.createElement('select');
+    priority.className = 'form-select';
+    ['high', 'medium', 'low'].forEach(lvl => priority.add(new Option(lvl, lvl)));
 
-    form.append(title, date, subBtn);
+    const btn = Object.assign(document.createElement('button'), { textContent: 'Add', type: 'submit', className: 'submit-btn' });
+
+    form.append(title, desc, date, priority, btn);
     anchor.appendChild(form);
 
     form.onsubmit = (e) => {
         e.preventDefault();
-        const newTodo = TodoFactory(title.value, "No description", date.value, "medium");
-        state.current.addTodo(newTodo); 
+        const todo = TodoFactory(title.value, desc.value, date.value, priority.value);
+        state.current.addTodo(todo);
         renderTodos(state.current);
         form.reset();
     };
-}
+};
