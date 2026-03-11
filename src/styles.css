@@ -274,3 +274,87 @@ header {
   transition: all 0.2s ease;
   width: 100%;
 }
+
+/* Mobile Adjustments (Phones and Tablets) */
+@media (max-width: 768px) {
+  body {
+    flex-direction: column; /* Stack Sidebar above Content */
+    height: auto;
+  }
+
+  #sidebar {
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid #334155;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  /* Make the "Add Project" UI horizontal on mobile to save space */
+  #project-input-group {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+  }
+
+  #content {
+    padding: 15px; /* Less padding on small screens */
+  }
+
+  .todo-form-container {
+    flex-direction: column; /* Stack form inputs vertically */
+  }
+}
+
+@media (max-width: 768px) {
+  .project-btn, .submit-btn, .del-btn {
+    padding: 12px; /* Bigger tap area */
+    font-size: 16px; 
+  }
+
+  .todo-card {
+    padding: 15px;
+    flex-direction: column; /* Stack todo info and buttons */
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .todo-checkbox {
+    width: 24px; /* Bigger checkbox for thumbs */
+    height: 24px;
+  }
+}
+
+/* Desktop: Hide the toggle button */
+.menu-toggle {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  /* Hide sidebar by default on mobile */
+  #sidebar {
+    display: none; 
+    position: absolute; /* Sits on top of content */
+    z-index: 100;
+    width: 80%;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+  }
+
+  /* When this class is added via JS, show the sidebar */
+  #sidebar.active {
+    display: flex;
+  }
+}

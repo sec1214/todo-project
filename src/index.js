@@ -6,12 +6,28 @@ import { renderTodos } from "./renderTodos";
 import { renderProjectList } from "./renderProjects";
 import { initProjectControls } from "./projectController";
 import { hardReset } from "./storage";
+//for mobile view
+const menuBtn = document.getElementById("mobile-menu-btn");
+const sidebar = document.getElementById("sidebar");
 
 // 1. Attempt to grab data from the browser's memory
 const savedData = loadFromLocalStorage();
 
 // 2. Initialize the projects array
 let projects;
+//for mobile view
+if (menuBtn && sidebar) {
+  menuBtn.onclick = () => {
+    sidebar.classList.toggle("active");
+  };
+
+  // Optional: Close sidebar when a project is clicked
+  sidebar.addEventListener("click", (e) => {
+    if (e.target.classList.contains("project-btn")) {
+      sidebar.classList.remove("active");
+    }
+  });
+}
 
 // RE-HYDRATION
 if (savedData && savedData.length > 0) {
