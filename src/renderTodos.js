@@ -1,48 +1,61 @@
-export const renderTodos = (project) => {
-    const display = document.getElementById('todo-display');
+import { saveToLocalStorage } from "./storage"; // Import this to persist the checkmark
 
-    if (!project || !project.getTodos) {
-        console.warn("Render aborted: No project provided.");
-        return; 
-    }
-    display.innerHTML = ""; 
+export const renderTodos = (project, allProjects) => {
+  // Pass projects so we can save
+  const display = document.getElementById("todo-display");
 
-    // Use getTodos() to stay consistent with your Factory
-    project.getTodos().forEach((todo, index) => {
-        const card = document.createElement('div');
-        // Ensure priority is lowercase for CSS matching
-        card.className = `todo-card ${todo.priority.toLowerCase()}`;
+  if (!project || !project.getTodos) {
+    display.innerHTML = "<p>Select a project to see tasks.</p>";
+    return;
+  }
 
-        const info = document.createElement('div');
-        info.className = 'todo-info';
+  display.innerHTML = "";
 
-        const actions = document.createElement('div');
-actions.className = 'todo-actions';
-        
-        const title = document.createElement('h3');
-        title.textContent = todo.title;
+  project.getTodos().forEach((todo, index) => {
+    const card = document.createElement("div");
+    // Add a 'completed' class if the data says true
+    card.className = `todo-card ${todo.priority.toLowerCase()} ${todo.completed ? "completed" : ""}`;
 
-        const desc = document.createElement('p');
-        desc.textContent = todo.description; 
-        desc.className = 'todo-description';
+    const info = document.createElement("div");
+    info.className = "todo-info";
 
-        const date = document.createElement('span');
-        date.textContent = todo.dueDate || 'No Date';
-        date.style.color = '#94a3b8';
+    // --- The Checkbox Logic ---
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = todo.completed; // Sync with data
+    checkbox.className = "todo-checkbox";
 
-        const delBtn = document.createElement('button');
-        delBtn.className = 'del-btn';
-        delBtn.textContent = 'Delete';
-        
-        delBtn.onclick = () => {
-            // Use the method from your ProjectFactory!
-            project.removeTodo(index); 
-            renderTodos(project);
-        };
+    checkbox.onclick = () => {
+      todo.completed = !todo.completed; // Data-only toggle!
+      saveToLocalStorage(allProjects); // Save the change to the browser
+      renderTodos(project, allProjects); // Refresh the view
+    };
 
-        info.append(title, desc);
-        actions.append(date, delBtn);
-        card.append(info, actions);
-        display.appendChild(card);
-    });
+    const title = document.createElement("h3");
+    title.textContent = todo.title;
+
+    // ... existing description and date code ...
+    const desc = document.createElement("p");
+    desc.textContent = todo.description;
+    desc.className = "todo-description";
+
+    const actions = document.createElement("div");
+    actions.className = "todo-actions";
+
+    const delBtn = document.createElement("button");
+    delBtn.className = "del-btn";
+    delBtn.textContent = "Delete";
+
+    delBtn.onclick = () => {
+      project.removeTodo(index);
+      saveToLocalStorage(allProjects); // Save after deleting!
+      renderTodos(project, allProjects);
+    };
+
+    // Put it all together
+    info.append(checkbox, title, desc); // Added checkbox here
+    actions.append(delBtn);
+    card.append(info, actions);
+    display.appendChild(card);
+  });
 };

@@ -225,6 +225,15 @@ header {
 .todo-card.medium { border-left: 8px solid var(--amber-primary); }
 .todo-card.low { border-left: 8px solid var(--emerald-primary); }
 
+.todo-card.completed {
+    opacity: 0.6;
+}
+
+.todo-card.completed h3 {
+    text-decoration: line-through;
+    color: #94a3b8;
+}
+
 .todo-info {
     display: flex;
     flex-direction: column;
@@ -250,4 +259,18 @@ header {
     border-radius: 6px;
     font-weight: 600;
     cursor: pointer;
+}
+
+/* Position the button at the bottom of the sidebar */
+#reset-app-btn {
+  margin-top: auto; /* Pushes button to the bottom if sidebar is flex */
+  background: transparent;
+  color: #64748b;
+  border: 1px solid #334155;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+  width: 100%;
 }

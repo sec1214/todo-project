@@ -1,17 +1,19 @@
+import { ProjectFactory } from "./project";
+import { renderProjectList } from "./renderProjects";
+import { renderTodos } from "./renderTodos";
+import { saveToLocalStorage } from "./storage"; // Added import
+
 export const initProjectControls = (projects, state) => {
-  // 1. Target the correct ID from your HTML
   const showBtn = document.getElementById("show-input-btn");
   const inputGroup = document.getElementById("project-input-group");
   const inputField = document.getElementById("new-project-name");
   const saveBtn = document.getElementById("save-project");
   const cancelBtn = document.getElementById("cancel-project");
+  const projectListContainer = document.getElementById("project-list"); // Added for navigation
 
-  // Safety check: if the HTML isn't there, don't run the code
   if (!showBtn || !inputGroup) return;
 
   const showInput = () => {
-    // We don't need to hide the showBtn (the + icon)
-    // because it's at the top, but we definitely show the group
     inputGroup.style.display = "block";
     inputField.focus();
   };
@@ -21,7 +23,6 @@ export const initProjectControls = (projects, state) => {
     inputGroup.style.display = "none";
   };
 
-  // 2. Attach the click to the correct button
   showBtn.onclick = showInput;
   cancelBtn.onclick = hideInput;
 
@@ -30,12 +31,30 @@ export const initProjectControls = (projects, state) => {
     if (name) {
       const newProject = ProjectFactory(name);
       projects.push(newProject);
+
+      // Save the change to the browser memory!
+      saveToLocalStorage(projects);
+
       state.current = newProject;
 
       renderProjectList(projects, state);
-      renderTodos(state.current);
+      // Pass 'projects' as the 2nd argument!
+      renderTodos(state.current, projects);
       hideInput();
     }
+  };
+
+  // --- NEW: Navigation Logic ---
+  // This allows you to click projects in the sidebar to switch views
+  projectListContainer.onclick = (e) => {
+    const item = e.target.closest("li");
+    if (!item) return;
+
+    const index = item.dataset.index;
+    state.current = projects[index];
+
+    renderProjectList(projects, state);
+    renderTodos(state.current, projects);
   };
 
   inputField.onkeydown = (e) => {

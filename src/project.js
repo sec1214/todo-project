@@ -1,27 +1,18 @@
-export const ProjectFactory = (name) => {
-    // This array is the "vault" where the Todo objects live
-    let todos = [];
+// project.js
+export const ProjectFactory = (name, existingTodos = []) => {
+  let todos = [...existingTodos];
 
-    
+  // We still keep these functions here because they manage the ARRAY,
+  // which is more complex than just flipping a true/false switch.
+  const addTodo = (todo) => todos.push(todo);
+  const getTodos = () => todos;
+  const removeTodo = (index) => todos.splice(index, 1);
 
-    // Here is that 'Mail Slot' (parameter) we discussed!
-    // It takes a todo object and slides it into the vault.
-    const addTodo = (todoObject) => {
-        todos.push(todoObject);
-    };
-
-    const getTodos = () => todos;
-
-    const removeTodo = (index) => {
-        // Removes 1 item at the specific index position
-        todos.splice(index, 1);
-    };
-
-    return { 
-        name, 
-        todos,
-        addTodo, 
-        getTodos, 
-        removeTodo 
-    };
+  return {
+    name,
+    todos,
+    addTodo,
+    getTodos,
+    removeTodo,
+  };
 };

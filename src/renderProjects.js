@@ -1,4 +1,5 @@
 import { renderTodos } from "./renderTodos.js";
+import { saveToLocalStorage } from "./storage.js"; // Needed for deletions
 
 export const renderProjectList = (projectsArray, stateManager) => {
   const listContainer = document.getElementById("project-list");
@@ -8,8 +9,11 @@ export const renderProjectList = (projectsArray, stateManager) => {
   listContainer.innerHTML = "";
 
   projectsArray.forEach((project, index) => {
-    const projectWrapper = document.createElement("div");
-    projectWrapper.className = "project-wrapper";
+    // 1. We create a list item (li) to hold our buttons
+    const li = document.createElement("li");
+    li.className = "project-wrapper";
+    // This index helps the controller identify which project was clicked
+    li.dataset.index = index;
 
     const projectBtn = document.createElement("button");
     projectBtn.textContent = project.name;
@@ -23,7 +27,8 @@ export const renderProjectList = (projectsArray, stateManager) => {
     projectBtn.onclick = () => {
       stateManager.current = project;
       renderProjectList(projectsArray, stateManager);
-      renderTodos(project);
+      // Pass both arguments to renderTodos so checkboxes work!
+      renderTodos(stateManager.current, projectsArray);
     };
 
     const delBtn = document.createElement("button");
@@ -31,22 +36,26 @@ export const renderProjectList = (projectsArray, stateManager) => {
     delBtn.className = "del-project-btn";
 
     delBtn.onclick = (e) => {
-      e.stopPropagation();
+      e.stopPropagation(); // Prevents the projectBtn from firing
 
-      // Don't allow deleting the last project if you want to avoid a blank screen
+      // 2. Delete the project from the array
       projectsArray.splice(index, 1);
 
+      // 3. Keep LocalStorage in sync!
+      saveToLocalStorage(projectsArray);
+
+      // 4. Handle state if we just deleted the project the user was looking at
       if (stateManager.current === project) {
         stateManager.current =
           projectsArray.length > 0 ? projectsArray[0] : null;
       }
 
       renderProjectList(projectsArray, stateManager);
-      renderTodos(stateManager.current);
+      renderTodos(stateManager.current, projectsArray);
     };
 
-    projectWrapper.appendChild(projectBtn);
-    projectWrapper.appendChild(delBtn);
-    listContainer.appendChild(projectWrapper);
+    li.appendChild(projectBtn);
+    li.appendChild(delBtn);
+    listContainer.appendChild(li);
   });
 };
