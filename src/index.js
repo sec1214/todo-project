@@ -6,61 +6,70 @@ import { renderTodos } from "./renderTodos";
 import { renderProjectList } from "./renderProjects";
 import { initProjectControls } from "./projectController";
 import { hardReset } from "./storage";
-//for mobile view
+
+// --- DOM ELEMENTS ---
 const menuBtn = document.getElementById("mobile-menu-btn");
 const sidebar = document.getElementById("sidebar");
+const mainWrapper = document.querySelector(".main-wrapper");
 
-// 1. Attempt to grab data from the browser's memory
+// --- DATA INITIALIZATION (RE-HYDRATION) ---
 const savedData = loadFromLocalStorage();
-
-// 2. Initialize the projects array
 let projects;
-//for mobile view
-if (menuBtn && sidebar) {
-  menuBtn.onclick = () => {
-    sidebar.classList.toggle("active");
-  };
 
-  // Optional: Close sidebar when a project is clicked
-  sidebar.addEventListener("click", (e) => {
-    if (e.target.classList.contains("project-btn")) {
-      sidebar.classList.remove("active");
-    }
-  });
-}
-
-// RE-HYDRATION
 if (savedData && savedData.length > 0) {
-  // We turn saved projects back into objects with methods (addTodo, etc.)
-  // The ProjectFactory handles the todo array automatically.
   projects = savedData.map((proj) => ProjectFactory(proj.name, proj.todos));
 } else {
-  // FALLBACK: If first time visiting, start with a fresh Inbox
   projects = [ProjectFactory("Inbox")];
 }
 
-// 3. Set the initial state (tracking which project is active)
 const state = { current: projects[0] };
 
-//reset button
-document.getElementById("reset-app-btn").onclick = () => {
-  if (confirm("Are you sure? This will delete all projects and tasks!")) {
-    hardReset();
-  }
-};
+// --- MOBILE DRAWER LOGIC ---
+if (menuBtn && sidebar) {
+  // Toggle sidebar visibility
+  menuBtn.onclick = (e) => {
+    e.stopPropagation(); // Prevents click from bubbling to mainWrapper
+    sidebar.classList.toggle("active");
+  };
 
-// --- Initialize UI Components ---
+  // Close sidebar when clicking a project or a delete button
+  sidebar.addEventListener("click", (e) => {
+    if (
+      e.target.classList.contains("project-btn") ||
+      e.target.classList.contains("del-project-btn")
+    ) {
+      sidebar.classList.remove("active");
+    }
+  });
 
-// Setup the Todo input form
-// UPDATED: Now passes 'projects' so the form can trigger saveToLocalStorage
+  // Close sidebar when clicking the main content (overlay effect)
+  mainWrapper.onclick = () => {
+    if (sidebar.classList.contains("active")) {
+      sidebar.classList.remove("active");
+    }
+  };
+}
+
+// --- APP ACTIONS ---
+
+// Reset Button Logic
+const resetBtn = document.getElementById("reset-app-btn");
+if (resetBtn) {
+  resetBtn.onclick = () => {
+    if (confirm("Are you sure? This will delete all projects and tasks!")) {
+      hardReset();
+      // Sidebars should close after a reset on mobile
+      sidebar.classList.remove("active");
+    }
+  };
+}
+
+// --- INITIALIZE UI ---
+
+// Setup form and render initial views
 createForm(state, projects);
-
-// Draw the initial list of projects in the sidebar
 renderProjectList(projects, state);
-
-// Draw the initial todos
-// Passing 'projects' allows checkboxes/deletes to persist changes
 renderTodos(state.current, projects);
 
-// Attach listeners for adding projects and switching between them
+// Initialize controllers for adding/switching projects
 initProjectControls(projects, state);

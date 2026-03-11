@@ -1,4 +1,5 @@
 :root {
+    /* Color Palette */
     --emerald-dark: #064e3b;
     --emerald-primary: #10b981;
     --amber-primary: #f59e0b;
@@ -9,14 +10,22 @@
     --white: #ffffff;
     --red-light: #fee2e2;
     --red-primary: #ef4444;
+    
+    /* Layout Variables */
+    --sidebar-width: 280px;
 }
 
 /* --- BASE STYLES --- */
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     background-color: var(--white);
-    overflow-x: hidden;
+    color: var(--slate-900);
+    overflow: hidden; /* Prevents double scrollbars */
 }
 
 .app-container {
@@ -25,22 +34,17 @@ body {
     width: 100vw;
 }
 
-/* --- MOBILE TOGGLE BUTTON --- */
-.menu-toggle {
-    display: none; /* Hidden on Desktop */
-}
-
 /* --- SIDEBAR --- */
 #sidebar {
-    width: 260px;
+    width: var(--sidebar-width);
     background-color: var(--emerald-dark);
     color: white;
     padding: 2rem 1.5rem;
     display: flex;
     flex-direction: column;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    transition: left 0.3s ease;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
     z-index: 1000;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .logo {
@@ -54,12 +58,11 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
 }
 
 .projects-header h2 {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: rgba(255, 255, 255, 0.5);
@@ -72,17 +75,18 @@ body {
     color: var(--emerald-primary);
     font-size: 1.5rem;
     cursor: pointer;
-    line-height: 1;
+    transition: transform 0.2s;
 }
 
-/* --- PROJECT ITEMS --- */
+.icon-add-btn:hover { transform: scale(1.2); color: white; }
+
+/* --- PROJECT LIST --- */
 .project-wrapper {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     margin-bottom: 4px;
-    width: 100%;
     border-radius: 8px;
+    transition: background 0.2s;
 }
 
 .project-btn {
@@ -90,175 +94,167 @@ body {
     background: transparent;
     border: none;
     color: #a7f3d0;
-    padding: 10px;
+    padding: 12px;
     text-align: left;
-    border-radius: 8px;
     cursor: pointer;
     font-weight: 500;
+    font-size: 0.95rem;
 }
 
 .project-btn.active {
     background: var(--emerald-primary);
     color: white;
+    border-radius: 8px;
 }
 
 .del-project-btn {
     background: transparent;
     border: none;
-    color: rgba(167, 243, 208, 0.4);
-    font-size: 1.2rem;
+    color: rgba(255,255,255,0.3);
+    padding: 0 10px;
     cursor: pointer;
 }
 
-/* --- MAIN CONTENT --- */
+.del-project-btn:hover { color: var(--red-primary); }
+
+/* --- MAIN CONTENT AREA --- */
 .main-wrapper {
     flex: 1;
     display: flex;
     flex-direction: column;
+    background: var(--white);
     overflow-y: auto;
 }
 
+.menu-toggle {
+    display: none; /* Hidden on desktop */
+}
+
 header {
-    padding: 1.5rem 2rem;
+    padding: 2rem;
     border-bottom: 1px solid var(--slate-100);
 }
 
+/* --- TODO FORM --- */
 .todo-form-container {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     background: var(--slate-100);
-    padding: 15px;
+    padding: 20px;
     border-radius: 12px;
 }
 
 .form-input, .form-date, .form-select {
-    padding: 10px;
+    padding: 12px;
     border: 1px solid var(--slate-200);
-    border-radius: 6px;
+    border-radius: 8px;
     flex: 1;
-    font-size: 0.95rem;
+    font-size: 1rem; /* Critical for mobile zoom */
+}
+
+.submit-btn {
+    background: var(--emerald-primary);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 /* --- TODO CARDS --- */
 #todo-display {
     padding: 2rem;
+    max-width: 900px;
 }
 
 .todo-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 24px;
+    padding: 1.2rem 1.5rem;
     background: white;
     border-radius: 12px;
-    margin-bottom: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     border: 1px solid var(--slate-200);
 }
 
-.todo-card.high { border-left: 8px solid var(--red-primary); }
-.todo-card.medium { border-left: 8px solid var(--amber-primary); }
-.todo-card.low { border-left: 8px solid var(--emerald-primary); }
+.todo-card.high { border-left: 6px solid var(--red-primary); }
+.todo-card.medium { border-left: 6px solid var(--amber-primary); }
+.todo-card.low { border-left: 6px solid var(--emerald-primary); }
 
-.todo-card.completed {
-    opacity: 0.6;
-}
+.todo-card.completed { opacity: 0.5; filter: grayscale(1); }
+.todo-card.completed h3 { text-decoration: line-through; }
 
-.todo-card.completed h3 {
-    text-decoration: line-through;
-}
+.todo-info { display: flex; flex-direction: column; gap: 4px; }
+.todo-info h3 { margin: 0; font-size: 1.1rem; }
+.todo-desc { margin: 0; color: var(--slate-500); font-size: 0.9rem; }
 
-.todo-info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
+.todo-actions { display: flex; align-items: center; gap: 1.5rem; }
+.todo-date { color: var(--slate-500); font-size: 0.85rem; font-weight: 600; }
 
-.todo-actions {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
+.todo-checkbox { width: 20px; height: 20px; cursor: pointer; }
 
-/* --- FOOTER BUTTONS --- */
+/* --- RESET BUTTON --- */
 #reset-app-btn {
     margin-top: auto;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
     color: #94a3b8;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 10px;
-    border-radius: 6px;
+    padding: 12px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 0.8rem;
 }
 
-/* --- MOBILE RESPONSIVE QUERIES (768px and below) --- */
+#reset-app-btn:hover { background: var(--red-primary); color: white; }
+
+/* --- MOBILE RESPONSIVE (Drawer Logic) --- */
 @media (max-width: 768px) {
     .menu-toggle {
         display: block;
-        background: var(--emerald-primary);
+        background: var(--emerald-dark);
         color: white;
         border: none;
-        padding: 12px 20px;
-        margin: 1rem;
-        border-radius: 8px;
+        padding: 15px;
         font-weight: bold;
+        text-align: left;
+        width: 100%;
         cursor: pointer;
-        width: fit-content;
     }
 
     #sidebar {
         position: fixed;
-        left: -280px; /* Hide off-screen */
         top: 0;
+        left: 0;
         bottom: 0;
-        width: 260px;
-        box-shadow: 10px 0 30px rgba(0,0,0,0.3);
+        transform: translateX(-100%); /* Start off-screen */
+        box-shadow: 10px 0 30px rgba(0,0,0,0.4);
     }
 
     #sidebar.active {
-        left: 0; /* Slide in when active */
+        transform: translateX(0); /* Slide in */
     }
 
-    header {
-        padding: 1rem;
+    header, #todo-display {
+        padding: 1.2rem;
     }
 
     .todo-form-container {
-        flex-direction: column; /* Stack inputs */
-    }
-
-    .form-input, .form-date, .form-select, .submit-btn {
-        width: 100%;
-        font-size: 16px; /* Prevents auto-zoom on iOS */
-        padding: 12px;
-    }
-
-    #todo-display {
-        padding: 1rem;
+        flex-direction: column;
     }
 
     .todo-card {
         flex-direction: column;
         align-items: flex-start;
-        padding: 15px;
-        gap: 15px;
+        gap: 1rem;
     }
 
     .todo-actions {
         width: 100%;
         justify-content: space-between;
+        padding-top: 1rem;
         border-top: 1px solid var(--slate-100);
-        padding-top: 10px;
-    }
-
-    .todo-checkbox {
-        width: 22px;
-        height: 22px;
-    }
-
-    .del-btn {
-        width: auto;
-        padding: 8px 12px;
     }
 }
