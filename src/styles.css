@@ -11,15 +11,23 @@
     --red-primary: #ef4444;
 }
 
+/* --- BASE STYLES --- */
 body {
     margin: 0;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     background-color: var(--white);
+    overflow-x: hidden;
 }
 
 .app-container {
     display: flex;
     height: 100vh;
+    width: 100vw;
+}
+
+/* --- MOBILE TOGGLE BUTTON --- */
+.menu-toggle {
+    display: none; /* Hidden on Desktop */
 }
 
 /* --- SIDEBAR --- */
@@ -31,6 +39,8 @@ body {
     display: flex;
     flex-direction: column;
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    transition: left 0.3s ease;
+    z-index: 1000;
 }
 
 .logo {
@@ -40,7 +50,6 @@ body {
 }
 .logo span { color: var(--emerald-primary); }
 
-/* New: Header for the Projects Section */
 .projects-header {
     display: flex;
     justify-content: space-between;
@@ -57,28 +66,16 @@ body {
     margin: 0;
 }
 
-/* The Hover-Reveal "+" Button */
 .icon-add-btn {
     background: transparent;
     border: none;
     color: var(--emerald-primary);
     font-size: 1.5rem;
     cursor: pointer;
-    opacity: 0; /* Hidden by default */
-    transition: opacity 0.2s, transform 0.2s;
     line-height: 1;
 }
 
-.sidebar-section:hover .icon-add-btn {
-    opacity: 1; /* Revealed on hover of the section */
-}
-
-.icon-add-btn:hover {
-    color: white;
-    transform: scale(1.2);
-}
-
-/* --- PROJECT LIST ITEMS --- */
+/* --- PROJECT ITEMS --- */
 .project-wrapper {
     display: flex;
     align-items: center;
@@ -98,12 +95,6 @@ body {
     border-radius: 8px;
     cursor: pointer;
     font-weight: 500;
-    transition: 0.2s;
-}
-
-.project-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
 }
 
 .project-btn.active {
@@ -114,67 +105,21 @@ body {
 .del-project-btn {
     background: transparent;
     border: none;
-    color: rgba(167, 243, 208, 0.3);
+    color: rgba(167, 243, 208, 0.4);
     font-size: 1.2rem;
     cursor: pointer;
-    opacity: 0;
-    transition: 0.2s;
 }
 
-.project-wrapper:hover .del-project-btn {
-    opacity: 1;
-}
-
-.del-project-btn:hover {
-    color: var(--red-primary);
-}
-
-/* --- NEW PROJECT INPUT GROUP --- */
-#project-input-group {
-    margin: 10px 0;
-    padding: 12px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-    border: 1px solid rgba(16, 185, 129, 0.3);
-}
-
-#new-project-name {
-    width: 100%;
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid var(--slate-200);
-    margin-bottom: 8px;
-    box-sizing: border-box; /* Fixes padding overflow */
-    font-size: 0.9rem;
-}
-
-.input-actions {
-    display: flex;
-    gap: 8px;
-}
-
-.input-actions .submit-btn {
-    flex: 2;
-    padding: 6px;
-    font-size: 0.8rem;
-}
-
-.input-actions .del-btn {
-    flex: 1;
-    padding: 6px;
-    background: rgba(239, 68, 68, 0.1);
-}
-
-/* --- MAIN CONTENT & FORM --- */
+/* --- MAIN CONTENT --- */
 .main-wrapper {
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow-y: auto;
 }
 
 header {
-    padding: 2rem;
+    padding: 1.5rem 2rem;
     border-bottom: 1px solid var(--slate-100);
 }
 
@@ -191,22 +136,12 @@ header {
     border: 1px solid var(--slate-200);
     border-radius: 6px;
     flex: 1;
-}
-
-.submit-btn {
-    background: var(--emerald-primary);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
+    font-size: 0.95rem;
 }
 
 /* --- TODO CARDS --- */
 #todo-display {
     padding: 2rem;
-    overflow-y: auto;
 }
 
 .todo-card {
@@ -231,7 +166,6 @@ header {
 
 .todo-card.completed h3 {
     text-decoration: line-through;
-    color: #94a3b8;
 }
 
 .todo-info {
@@ -240,121 +174,91 @@ header {
     gap: 4px;
 }
 
-.todo-info h3 { margin: 0; font-size: 1.1rem; color: var(--slate-900); }
-.todo-desc { margin: 0; font-size: 0.9rem; color: var(--slate-500); }
-
 .todo-actions {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 20px;
 }
 
-.todo-date { font-size: 0.85rem; color: #94a3b8; font-weight: 500; }
-
-.del-btn {
-    background: var(--red-light);
-    color: var(--red-primary);
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-/* Position the button at the bottom of the sidebar */
+/* --- FOOTER BUTTONS --- */
 #reset-app-btn {
-  margin-top: auto; /* Pushes button to the bottom if sidebar is flex */
-  background: transparent;
-  color: #64748b;
-  border: 1px solid #334155;
-  padding: 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  transition: all 0.2s ease;
-  width: 100%;
-}
-
-/* Mobile Adjustments (Phones and Tablets) */
-@media (max-width: 768px) {
-  body {
-    flex-direction: column; /* Stack Sidebar above Content */
-    height: auto;
-  }
-
-  #sidebar {
-    width: 100%;
-    height: auto;
-    border-right: none;
-    border-bottom: 1px solid #334155;
+    margin-top: auto;
+    background: rgba(255, 255, 255, 0.05);
+    color: #94a3b8;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 10px;
-    box-sizing: border-box;
-  }
-
-  /* Make the "Add Project" UI horizontal on mobile to save space */
-  #project-input-group {
-    display: flex;
-    flex-direction: row;
-    gap: 5px;
-  }
-
-  #content {
-    padding: 15px; /* Less padding on small screens */
-  }
-
-  .todo-form-container {
-    flex-direction: column; /* Stack form inputs vertically */
-  }
-}
-
-@media (max-width: 768px) {
-  .project-btn, .submit-btn, .del-btn {
-    padding: 12px; /* Bigger tap area */
-    font-size: 16px; 
-  }
-
-  .todo-card {
-    padding: 15px;
-    flex-direction: column; /* Stack todo info and buttons */
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .todo-checkbox {
-    width: 24px; /* Bigger checkbox for thumbs */
-    height: 24px;
-  }
-}
-
-/* Desktop: Hide the toggle button */
-.menu-toggle {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .menu-toggle {
-    display: block;
-    background: var(--primary);
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    margin: 10px;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
-    font-weight: bold;
-  }
+    font-size: 0.8rem;
+}
 
-  /* Hide sidebar by default on mobile */
-  #sidebar {
-    display: none; 
-    position: absolute; /* Sits on top of content */
-    z-index: 100;
-    width: 80%;
-    box-shadow: 5px 0 15px rgba(0,0,0,0.5);
-  }
+/* --- MOBILE RESPONSIVE QUERIES (768px and below) --- */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+        background: var(--emerald-primary);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        margin: 1rem;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        width: fit-content;
+    }
 
-  /* When this class is added via JS, show the sidebar */
-  #sidebar.active {
-    display: flex;
-  }
+    #sidebar {
+        position: fixed;
+        left: -280px; /* Hide off-screen */
+        top: 0;
+        bottom: 0;
+        width: 260px;
+        box-shadow: 10px 0 30px rgba(0,0,0,0.3);
+    }
+
+    #sidebar.active {
+        left: 0; /* Slide in when active */
+    }
+
+    header {
+        padding: 1rem;
+    }
+
+    .todo-form-container {
+        flex-direction: column; /* Stack inputs */
+    }
+
+    .form-input, .form-date, .form-select, .submit-btn {
+        width: 100%;
+        font-size: 16px; /* Prevents auto-zoom on iOS */
+        padding: 12px;
+    }
+
+    #todo-display {
+        padding: 1rem;
+    }
+
+    .todo-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .todo-actions {
+        width: 100%;
+        justify-content: space-between;
+        border-top: 1px solid var(--slate-100);
+        padding-top: 10px;
+    }
+
+    .todo-checkbox {
+        width: 22px;
+        height: 22px;
+    }
+
+    .del-btn {
+        width: auto;
+        padding: 8px 12px;
+    }
 }
